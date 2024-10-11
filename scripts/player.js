@@ -13,7 +13,7 @@ update(){
     this.position.y+=this.velocity.y;
 }
 build(){
-    const canvas =document.querySelector(".canvas");
+    const canvas =document.querySelector(".map");
     const c=canvas.getContext("2d");
     c.save();
     c.translate(this.position.x+40/2,this.position.y+50/2);

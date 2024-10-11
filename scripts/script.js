@@ -1,6 +1,6 @@
 
 
-const canvas=document.querySelector('canvas');
+const canvas=document.querySelector('.map');
 const c=canvas.getContext('2d');
 
 canvas.width = innerWidth;
@@ -29,7 +29,7 @@ const map=[
 
 
 const img =new Image();
-img.src="wall.jpg";
+img.src="../images/wall.jpg";
 img.onload=()=>{
 map.forEach((row,i)=>{
     row.forEach((symbol,j)=>{
@@ -41,7 +41,7 @@ map.forEach((row,i)=>{
 })
 }
 const bmg1 =new Image();
-bmg1.src="block1.jpg";
+bmg1.src="../images/block1.jpg";
 bmg1.onload=()=>{
 map.forEach((row,i)=>{
     row.forEach((symbol,j)=>{
@@ -53,7 +53,7 @@ map.forEach((row,i)=>{
 })
 }
 const bmg2 =new Image();
-bmg2.src="block2.jpg";
+bmg2.src="../images/block2.jpg";
 bmg2.onload=()=>{
 map.forEach((row,i)=>{
     row.forEach((symbol,j)=>{
@@ -66,7 +66,7 @@ map.forEach((row,i)=>{
 }
 
 const bmg3 =new Image();
-bmg3.src="block3.jpg";
+bmg3.src="../images/block3.jpg";
 bmg3.onload=()=>{
 map.forEach((row,i)=>{
     row.forEach((symbol,j)=>{
@@ -79,7 +79,7 @@ map.forEach((row,i)=>{
 }
 
 const bmg4 =new Image();
-bmg4.src="block4.jpg";
+bmg4.src="../images/block4.jpg";
 bmg4.onload=()=>{
 map.forEach((row,i)=>{
     row.forEach((symbol,j)=>{
