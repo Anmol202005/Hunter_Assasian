@@ -18,6 +18,9 @@ function move(){
     p.build();
     requestAnimationFrame(move);
 }
+// function rotor(p){
+//     var theeta=Math.atan2(spot.next.y-p.position.y-25,spot.next.x-p.position.x-20);
+// }
 addEventListener("click",(event)=>{var theeta=Math.atan2(event.y-p.position.y-25,event.x-p.position.x-20);
     
         if(event.x-p.position.x-20>=0){
@@ -34,4 +37,5 @@ addEventListener("click",(event)=>{var theeta=Math.atan2(event.y-p.position.y-25
 move();
 
 }
+
 
