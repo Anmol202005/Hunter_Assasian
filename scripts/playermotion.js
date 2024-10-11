@@ -2,7 +2,7 @@ const canvas =document.querySelector(".map");
 const c=canvas.getContext("2d");
 canvas.width=innerWidth;
 canvas.height=innerHeight;
-import {Player} from "./Player.js";
+import {Player} from "./player.js";
 const char1=new Image;
 char1.src="../images/walk with knife.png";
 char1.onload=()=>{
