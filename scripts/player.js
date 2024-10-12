@@ -11,6 +11,7 @@ this.angle=0;
 update(){
     this.position.x+=this.velocity.x;
     this.position.y+=this.velocity.y;
+
 }
 build(){
     const canvas =document.querySelector(".map");
@@ -22,3 +23,6 @@ build(){
     c.restore();
 
 }}
+
+const canvas =document.querySelector(".map");
+const c=canvas.getContext("2d");
