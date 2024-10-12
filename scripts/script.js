@@ -8,6 +8,7 @@ canvas.height = innerHeight;
 
 import {Boundary} from "./map.js";
 
+
 c.fillStyle = 'gray';
 c.fillRect(0, 0, canvas.width, canvas.height); 
 const map=[

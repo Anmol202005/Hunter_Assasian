@@ -33,6 +33,8 @@ class Villain {
 
 const canvas = document.querySelector(".map");
 const c = canvas.getContext("2d");
+
+
         
 const villainImage = new Image();
 villainImage.src = "villainspirite2.png"; 
@@ -50,3 +52,5 @@ villainImage.onload = () => {
 
 move(); 
 }
+
+
