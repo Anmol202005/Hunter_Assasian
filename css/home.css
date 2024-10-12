@@ -2,7 +2,7 @@ body{
     margin:0;
     background-color: #353542;
     overflow: hidden;
-    background-image: url('backgroundimage.jpg'); 
+    background-image: url('../images/backgroundimage.jpg'); 
     background-size: cover; 
     background-position: center; 
 }
