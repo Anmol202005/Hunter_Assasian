@@ -13,7 +13,7 @@ c.fillRect(0, 0, canvas.width, canvas.height);
 const map=[
     ['7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7'],   
     ['7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7','7'],   
-    ['7','7','3','0','0','0','0','0','0','0','0','0','0','3','3','3','0','0','0','0','0','7','7'],   
+    ['7','7','3','0','0','0','0','0','0','0','0','0','0','3','3','3','0','0','3','0','0','7','7'],   
     ['7','7','0','0','0','1','0','0','0','3','0','0','0','0','3','3','0','0','0','0','4','7','7'], 
     ['7','7','0','0','0','0','0','0','3','1','3','0','0','0','3','1','3','0','0','0','0','7','7'],   
     ['7','7','4','0','0','3','0','0','0','0','0','0','0','0','0','3','0','0','0','0','0','7','7'],
@@ -27,71 +27,238 @@ const map=[
     
 ]
 
-
+const border=[[],[],[],[],[],[],[],[],[],[],[],[],[]];
 const img =new Image();
 img.src="../images/wall.jpg";
-img.onload=()=>{
-map.forEach((row,i)=>{
-    row.forEach((symbol,j)=>{
-        switch(symbol){
-            case '7':new Boundary({position : {x:180+50*j,y:50+50*i},image:img}).draw();}
-                
-                   
-    })
-})
-}
 const bmg1 =new Image();
 bmg1.src="../images/block1.jpg";
-bmg1.onload=()=>{
-map.forEach((row,i)=>{
-    row.forEach((symbol,j)=>{
-        switch(symbol){
-            case '1':new Boundary({position : {x:180+50*j,y:50+50*i},image:bmg1}).draw();}
-                
-                   
-    })
-})
-}
 const bmg2 =new Image();
 bmg2.src="../images/block2.jpg";
-bmg2.onload=()=>{
-map.forEach((row,i)=>{
-    row.forEach((symbol,j)=>{
-        switch(symbol){
-            case '2':new Boundary({position : {x:180+50*j,y:50+50*i},image:bmg2}).draw();}
-                
-                   
-    })
-})
-}
-
 const bmg3 =new Image();
 bmg3.src="../images/block3.jpg";
-bmg3.onload=()=>{
-map.forEach((row,i)=>{
-    row.forEach((symbol,j)=>{
-        switch(symbol){
-            case '3':new Boundary({position : {x:180+50*j,y:50+50*i},image:bmg3}).draw();}
-                
-                   
-    })
-})
-}
-
 const bmg4 =new Image();
 bmg4.src="../images/block4.jpg";
-bmg4.onload=()=>{
-map.forEach((row,i)=>{
-    row.forEach((symbol,j)=>{
-        switch(symbol){
-            case '4':new Boundary({position : {x:180+50*j,y:50+50*i},image:bmg4}).draw();}
-                
-                   
-    })
-})
-}
+const images = [img, bmg1, bmg2, bmg3, bmg4];
+let loaded = 0;
 
+images.forEach(image => {
+    image.onload = () => {
+        loaded++;
+        if (loaded == 5) {
+            
+            map.forEach((row,i)=>{
+                    row.forEach((symbol,j)=>{
+                        switch(symbol){
+                            case '7':border[i][j]=new Boundary({position : {x:180+50*j,y:50+50*i},image:img});
+                             border[i][j].draw();
+                             border[i][j].blocked=true;
+                             break;
+                            case '1':border[i][j]=new Boundary({position : {x:180+50*j,y:50+50*i},image:bmg1});
+                             border[i][j].draw();
+                             border[i][j].blocked=true;
+                             break;
+                            case '2':border[i][j]=new Boundary({position : {x:180+50*j,y:50+50*i},image:bmg2});
+                             border[i][j].draw();
+                             border[i][j].blocked=true;
+                             break;
+                            case '3':border[i][j]=new Boundary({position : {x:180+50*j,y:50+50*i},image:bmg3});
+                             border[i][j].draw();
+                             border[i][j].blocked=true;
+                             break;
+                            case '4':border[i][j]=new Boundary({position : {x:180+50*j,y:50+50*i},image:bmg4});
+                             border[i][j].draw();
+                             border[i][j].blocked=true;
+                             break;
+                             case '@':border[i][j]=new Boundary({position : {x:180+50*j,y:50+50*i},image:bmg4});
+                             
+                             border[i][j].blocked=true;
+                             break;
+                             default:  
+                             border[i][j] = new Boundary({position: {x: 180 + 50 * j, y: 50 + 50 * i}, image: null});
+                             border[i][j].blocked = false;  
+                             break;
+                     
+                        }
+                                   
+                    })
+         })}}})
+
+import {Player} from "./player.js";
+const char1=new Image;
+char1.src="../images/walk with knife.png";
+var p;
+let path = [];
+var targetIndex = 0;
+char1.onload=()=>{
+p= new Player({position:{x:350,y:180},velocity:{x:0,y:0},image:char1}) 
+p.build();}
+
+
+function move(){
+    // c.save();
+    // c.translate(p.position.x+40/2,p.position.y+50/2);
+    // c.rotate(p.pangle);
+    // c.clearRect(-20,-25,40,50);
+    // c.restore();
+    // p.update();
+    // p.build();
+    if (path.length > 0 && p) {
+        // Get the next position to move to
+        const target = path[targetIndex];
+
+        // Calculate the difference between current position and target position
+        const dx = target.position.x - p.position.x;
+        const dy = target.position.y - p.position.y;
+        
+        // Define the speed of movement
+        const speed = 2;
+
+        // Normalize the direction
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance > 1) {
+            c.save();
+            c.translate(p.position.x+40/2,p.position.y+50/2);
+            c.rotate(p.pangle);
+            c.clearRect(-25,-25,50,50);
+            c.restore();
+            var theeta=Math.atan2(target.position.y-p.position.y-25,target.position.x-p.position.x-20);
+    
+        if(target.position.x-p.position.x-20>=0){
+            p.pangle=p.angle;
+            p.angle=theeta;
+        }
+        else{
+            p.pangle=p.angle;
+            p.angle=theeta;
+        }
+            p.position.x += (dx / distance) * speed;
+            p.position.y += (dy / distance) * speed;
+            p.build();
+        } else {
+            // If close enough to the target, move to the next point in the path
+            targetIndex++;
+        }
+
+        // If the player has reached the final target, stop moving
+        if (targetIndex >= path.length) {
+            console.log("Reached final destination.");
+            path = [];  // Clear the path after reaching the destination
+            targetIndex = 0;
+        }
+        
+        
+
+    }
 
     
+    requestAnimationFrame(move);
+}
+move();
 
+addEventListener("click", (event) => {
+    path,length=0;
+    targetIndex=0;
+    if (!p) return;  // Ensure player exists before attempting pathfinding
 
+    // Reset heuristic values and neighbors for all grid cells
+    border.forEach((row, i) => {
+        row.forEach((grid, j) => {
+            grid.f = 0;
+            grid.g = 0;
+            grid.h = 0;
+            grid.neighbour = [];
+
+            // Add neighboring cells (including diagonals)
+            if (i - 1 >= 0) {
+                grid.neighbour.push(border[i-1][j]);  // Top
+                if (j - 1 >= 0) grid.neighbour.push(border[i-1][j-1]);  // Top-left
+                if (j + 1 <= 22) grid.neighbour.push(border[i-1][j+1]);  // Top-right
+            }
+            if (i + 1 <= 12) {
+                grid.neighbour.push(border[i+1][j]);  // Bottom
+                if (j - 1 >= 0) grid.neighbour.push(border[i+1][j-1]);  // Bottom-left
+                if (j + 1 <= 22) grid.neighbour.push(border[i+1][j+1]);  // Bottom-right
+            }
+            if (j - 1 >= 0) grid.neighbour.push(border[i][j-1]);  // Left
+            if (j + 1 <= 22) grid.neighbour.push(border[i][j+1]);  // Right
+        });
+    });
+
+    // Calculate player's current grid position
+    const row = Math.floor((p.position.y - 50) / 50);
+    const column = Math.floor((p.position.x - 180) / 50);
+
+    const start = border[row][column];  // Starting position in the grid
+    
+    const target = {
+        x: event.x,
+        y: event.y
+    };
+
+    // Pathfinding algorithm (A*)
+    const openList = [];
+    const closedList = [];
+    openList.push(start);
+
+    // Heuristic function (Manhattan distance for grid-based movement)
+    function heuristic(a, b) {
+        return Math.abs(a.position.x - b.x) + Math.abs(a.position.y - b.y);
+    }
+
+    while (openList.length > 0) {
+        let lowestIndex = 0;
+        for (let i = 0; i < openList.length; i++) {
+            if (openList[i].f < openList[lowestIndex].f) {
+                lowestIndex = i;
+            }
+        }
+
+        let current = openList[lowestIndex];
+
+        // Check if we've reached the target
+        if (current.position.x <= target.x && current.position.x + 50 >= target.x &&
+            current.position.y <= target.y && current.position.y + 50 >= target.y) {
+            console.log("Path found!");
+
+            // Reconstruct the path
+            
+            
+            const visitedNodes = new Set();
+let temp = current;
+
+while (temp && temp.parent && !visitedNodes.has(temp)) {
+    path.push(temp);
+    visitedNodes.add(temp);
+    temp = temp.parent;
+}
+            path.reverse();  // Reverse the path to start from the beginning
+            targetIndex = 0;  // Reset the index to start moving
+            return;
+        }
+
+        // Remove current node from open list and add to closed list
+        openList.splice(lowestIndex, 1);
+        closedList.push(current);
+
+        // Process neighbors of the current node
+        current.neighbour.forEach(neighbour => {
+            if (closedList.includes(neighbour) || neighbour.blocked) return;  // Skip blocked or already processed cells
+
+            const tentativeG = current.g + 1;
+
+            if (!openList.includes(neighbour)) {
+                neighbour.g = tentativeG;
+                neighbour.h = heuristic(neighbour, target);
+                neighbour.f = neighbour.g + neighbour.h;
+                neighbour.parent = current;
+                openList.push(neighbour);  // Add neighbor to the open list
+            } else if (tentativeG < neighbour.g) {
+                neighbour.g = tentativeG;
+                neighbour.f = neighbour.g + neighbour.h;
+                neighbour.parent = current;
+            }
+        });
+    }
+
+    console.log("No path found.");
+});
