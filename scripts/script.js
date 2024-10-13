@@ -31,8 +31,8 @@ const map=[
     [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '7', '7', '7', '7' ],
     [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
     [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '1', '1', '3', '3', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '1', '1', '3', '3', '7', '7', '7', '7' ],
+    [ '7', '7', '7', '7', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '1', '1', '3', '3', '7', '7', '7', '7' ],
+    [ '7', '7', '7', '7', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '1', '1', '3', '3', '7', '7', '7', '7' ],
     [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '2', '2', '4', '4', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
     [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '2', '2', '4', '4', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
     [ '7', '7', '7', '7', '2', '2', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
@@ -109,6 +109,7 @@ import {Player} from "./player.js";
 import{Bullet} from "./bullet.js"
 const char1=new Image;
 char1.src="../images/walk with knife.png";
+char1.frameIndex=1;
 var p;
 let path = [];
 var targetIndex = 0;
@@ -139,6 +140,10 @@ villains.forEach((vill)=>{
     vill.bullets.forEach((bullet, index) => {
         if(boundary_check(bullet) || kill_check(p,bullet)){
             vill.bullets.splice(index, 1);
+            if(kill_check(p,bullet)){
+                 p.position.x=-1000;
+                 p.position.y=-1000;
+            }
             return;
         }
         bullet.update();})
@@ -161,17 +166,29 @@ move();}
 addEventListener("keydown",(event)=>{
     
     if(event.key=="ArrowDown" || event.key=="s"){
-        p.velocity.y=4;
-        
+        p.velocity.y=2;
+        char1.frameIndex=6;
     }
     if(event.key=="ArrowUp" || event.key=="w"){
-        p.velocity.y=-4;
+        p.velocity.y=-2;
+        char1.frameIndex=6;
     }
     if(event.key=="ArrowRight" || event.key=="d"){
-        p.velocity.x=4;
+        p.velocity.x=2;
+        char1.frameIndex=6;
     }
     if(event.key=="ArrowLeft" || event.key=="a"){
-        p.velocity.x=-4;
+        p.velocity.x=-2;
+        char1.frameIndex=6;
+    }
+    if(event.key==" "){
+        const kn=new Image;
+
+        kn.src="../images/knife.png";
+        kn.frameIndex=8;
+        p.image=kn;
+        p.off=5;
+        kill();
     }
     p.angle=Math.atan2(p.velocity.y,p.velocity.x);
 })
@@ -179,15 +196,23 @@ addEventListener("keyup",(event)=>{
     
     if(event.key=="ArrowDown" || event.key=="s"){
         p.velocity.y=0;
+        char1.frameIndex=1;
     }
     if(event.key=="ArrowUp" || event.key=="w"){
         p.velocity.y=0;
+        char1.frameIndex=1;
     }
     if(event.key=="ArrowRight" || event.key=="d"){
         p.velocity.x=0;
+        char1.frameIndex=1;
     }
     if(event.key=="ArrowLeft" || event.key=="a"){
         p.velocity.x=0;
+        char1.frameIndex=1;
+    }
+    if(event.key==" "){
+        
+        p.image=char1;
     }
 })
 function boundary_check(p) {
@@ -200,10 +225,10 @@ function boundary_check(p) {
           const wallHeight = 25;
   
           if (
-            p.position.x+p.velocity.x < wallX + wallWidth &&
-            p.position.x +p.velocity.x+ 40 > wallX &&
-            p.position.y +p.velocity.y< wallY + wallHeight &&
-            p.position.y +p.velocity.y+ 50 > wallY
+            p.position.x+p.velocity.x <= wallX + wallWidth &&
+            p.position.x +p.velocity.x+ 50 >= wallX &&
+            p.position.y +p.velocity.y<= wallY + wallHeight &&
+            p.position.y +p.velocity.y+ 50 >= wallY
           ) {
             return true; 
           }
@@ -233,7 +258,7 @@ bulletImage.src = "../images/bullet.png";
         let s=Math.ceil(Math.random*3);
         
         villains.forEach((vill)=>{
-            if (getDistance(vill, p) < 95 && !(p.position.x < vill.position.x && p.velocity.x>=0 && vill.velocity.x>0) && !(p.position.x > vill.position.x && p.velocity.x<=0 && vill.velocity.x<0)) {
+            if (getDistance(vill, p) < 95 && !(p.position.x < vill.position.x && p.velocity.x<vill.velocity.x) && !(p.position.x > vill.position.x && p.velocity.x> vill.velocity.x)&&!(p.position.y < vill.position.y && p.velocity.y< vill.velocity.y)&& !(p.position.y > vill.position.y&& p.velocity.y>vill.velocity.y)) {
                 
                vill.startShooting(p);
             }
@@ -333,3 +358,12 @@ bulletImage.src = "../images/bullet.png";
                 
                 return false;
             }
+            function kill(){
+                villains.forEach((vill,i)=>{
+                    if(p.position.x+50>vill.position.x&& p.position.x<vill.position.x+40&& p.position.y<vill.position.y+50 && p.position.y+50>vill.position.y){
+                        villains.splice(i,1);
+                    }
+                })
+            }
+            
+            
