@@ -1,5 +1,12 @@
 body{
+   
+    margin: 0;
+}
+.map{
     margin:0;
-    background-color: gray;
+    width: 100vw; /* Full width of the viewport */
+    height: 100vh;
+    background-image: url("../images/images.jpeg");
+   background-repeat: repeat;
     
 }
