@@ -15,9 +15,9 @@
 
 
 
-    draw(){
-        const canvas=document.querySelector('canvas');
-const c=canvas.getContext('2d');
+    draw(c){
+        
+
         c.drawImage(this.image,this.position.x,this.position.y);
     }
    
