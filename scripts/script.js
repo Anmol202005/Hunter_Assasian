@@ -1,5 +1,5 @@
 
-
+import {Coin} from "./coins.js"
 const canvas=document.querySelector('.map');
 const c=canvas.getContext('2d');
 
@@ -133,6 +133,7 @@ function move(){
             p.angle=theeta;
         }
             p.position.x += (dx / distance) * speed;
+            
             p.position.y += (dy / distance) * speed;
             p.build();
         } else {
@@ -267,3 +268,50 @@ while (temp && temp.parent && !visitedNodes.has(temp)) {
 
     console.log("No path found.");
 });
+
+
+const coinImage = new Image();
+coinImage.src = '../images/coin.png'; 
+coinImage.onload = () => {
+    
+    const coinPositions = RandomCoinPositions(ZeroPositions(map),10);
+
+    coinPositions.forEach((position) => {
+        const coin = new Coin(position, coinImage);
+        coin.build(); 
+    });
+};
+
+
+    
+function ZeroPositions(map) {
+    const zeroarr = [];
+    map.forEach((row, rowIndex) => {
+        row.forEach((cell, colIndex) => {
+            if (cell === '0') {
+                zeroarr.push({ x: colIndex*50+180 , y: rowIndex*50+50 });
+            }
+        });
+    });
+    return zeroarr;
+}
+
+function RandomCoinPositions(zeroPositions) {
+    const coinposition = [];
+    const totalCoins = 10;
+
+    while (coinposition.length < totalCoins) {
+        const randomIndex = Math.floor(Math.random() * zeroPositions.length);
+        const position = zeroPositions[randomIndex];
+
+        
+        if (!coinposition.includes(position)) {
+           coinposition.push(position);
+        }
+    }
+
+    return coinposition;
+}
+
+
+
