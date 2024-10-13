@@ -5,7 +5,10 @@ const c=canvas.getContext('2d');
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
-
+const offscreenCanvas = document.createElement('canvas');
+const offscreenCtx = offscreenCanvas.getContext('2d');
+offscreenCanvas.width = canvas.width;
+offscreenCanvas.height = canvas.height;
 import {Boundary} from "./map.js";
 
 
@@ -54,6 +57,7 @@ bmg4.src="../images/wall.png";
 const images = [img, bmg1, bmg2, bmg3, bmg4];
 let loaded = 0;
 let bsize=25;
+
 images.forEach(image => {
     image.onload = () => {
         loaded++;
@@ -63,29 +67,26 @@ images.forEach(image => {
                     row.forEach((symbol,j)=>{
                         switch(symbol){
                             case '7':border[i][j]=new Boundary({position : {x:120+bsize*j,y:25+bsize*i},image:img});
-                             border[i][j].draw();
+                             border[i][j].draw(offscreenCtx);
                              border[i][j].blocked=true;
                              break;
                             case '1':border[i][j]=new Boundary({position : {x:120+bsize*j,y:25+bsize*i},image:bmg1});
-                             border[i][j].draw();
+                             border[i][j].draw(offscreenCtx);
                              border[i][j].blocked=true;
                              break;
                             case '2':border[i][j]=new Boundary({position : {x:120+bsize*j,y:25+bsize*i},image:bmg2});
-                             border[i][j].draw();
+                             border[i][j].draw(offscreenCtx);
                              border[i][j].blocked=true;
                              break;
                             case '3':border[i][j]=new Boundary({position : {x:120+bsize*j,y:25+bsize*i},image:bmg3});
-                             border[i][j].draw();
+                             border[i][j].draw(offscreenCtx);
                              border[i][j].blocked=true;
                              break;
                             case '4':border[i][j]=new Boundary({position : {x:120+bsize*j,y:25+bsize*i},image:bmg4});
-                             border[i][j].draw();
+                             border[i][j].draw(offscreenCtx);
                              border[i][j].blocked=true;
                              break;
-                             case '@':border[i][j]=new Boundary({position : {x:120+bsize*j,y:25+bsize*i},image:bmg4});
                              
-                             border[i][j].blocked=true;
-                             break;
                              default:  
                              border[i][j] = new Boundary({position: {x: 120 + bsize * j, y: 25 + bsize * i}, image: null});
                              border[i][j].blocked = false;  
@@ -94,9 +95,18 @@ images.forEach(image => {
                         }
                                    
                     })
-         })}}})
-
+         });
+        c.drawImage(offscreenCanvas, 0, 0);}}})
+         function render() {
+            c.clearRect(0, 0, canvas.width, canvas.height); // Clear the main canvas
+            c.drawImage(offscreenCanvas, 0, 0); // Draw the offscreen canvas
+          }
+          
+          // Call the render function whenever needed to update the main canvas
+          render();
+         
 import {Player} from "./player.js";
+import{Bullet} from "./bullet.js"
 const char1=new Image;
 char1.src="../images/walk with knife.png";
 var p;
@@ -109,6 +119,10 @@ p.build();
 
 
 function move(){
+    
+c.clearRect(0,0,canvas.width,canvas.height);
+render();
+p.build();
 if(boundary_check(p)==false){
     c.save();
     c.translate(p.position.x+40/2,p.position.y+50/2);
@@ -121,11 +135,23 @@ if(boundary_check(p)==false){
 }   
 
 villains.forEach((vill)=>{
-    c.clearRect(vill.position.x,vill.position.y,40,50);
+    
+    vill.bullets.forEach((bullet, index) => {
+        if(boundary_check(bullet) || kill_check(p,bullet)){
+            vill.bullets.splice(index, 1);
+            return;
+        }
+        bullet.update();})
+
     villran();
     vill.update();
     vill.build();
-})
+    })
+
+    
+    
+    
+
 
     requestAnimationFrame(move);
 }
@@ -133,7 +159,7 @@ move();}
 
 
 addEventListener("keydown",(event)=>{
-    console.log(event);
+    
     if(event.key=="ArrowDown" || event.key=="s"){
         p.velocity.y=4;
         
@@ -150,7 +176,7 @@ addEventListener("keydown",(event)=>{
     p.angle=Math.atan2(p.velocity.y,p.velocity.x);
 })
 addEventListener("keyup",(event)=>{
-    console.log(event);
+    
     if(event.key=="ArrowDown" || event.key=="s"){
         p.velocity.y=0;
     }
@@ -198,12 +224,21 @@ villainImage.onload = () => {
     villains.push(new Villain({ position: { x: 700, y: 500 }, velocity: { x: 1, y: 0 }, image: villainImage }));
     villains.push(new Villain({ position: { x: 700, y: 300 }, velocity: { x: 1, y: 0 }, image: villainImage }));
     villains.forEach((vill)=>{ vill.build();})}
+    let bullets = [];
+const bulletImage = new Image();
+bulletImage.src = "../images/bullet.png";
     function villran(){
         var arr=[1,2,3,4];
         var arr= shuffleArray(arr);
         let s=Math.ceil(Math.random*3);
         
         villains.forEach((vill)=>{
+            if (getDistance(vill, p) < 95 && !(p.position.x < vill.position.x && p.velocity.x>=0 && vill.velocity.x>0) && !(p.position.x > vill.position.x && p.velocity.x<=0 && vill.velocity.x<0)) {
+                
+               vill.startShooting(p);
+            }
+            else{vill.stopShooting();}
+            
             if(boundary_check(vill)){
                 if(arr[0]==1){
             vill.velocity.x=1;
@@ -271,3 +306,30 @@ villainImage.onload = () => {
                    
                 return array;
              }
+             function getDistance(vill, player) {
+                const dx = vill.position.x - player.position.x;
+                const dy = vill.position.y - player.position.y;
+                return Math.sqrt(dx * dx + dy * dy); 
+            }
+
+            function kill_check(p,b) {
+                
+                    
+                      const wallX = p.position.x;
+                      const wallY = p.position.y;
+                      const wallWidth = 40;
+                      const wallHeight = 50;
+              
+                      if (
+                        b.position.x+b.velocity.x < wallX + wallWidth &&
+                        b.position.x +b.velocity.x+ 10 > wallX &&
+                        b.position.y +b.velocity.y< wallY + wallHeight &&
+                        b.position.y +b.velocity.y+ 10 > wallY
+                      ) {
+                        return true; 
+                      }
+                    
+                  
+                
+                return false;
+            }
