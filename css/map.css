@@ -49,3 +49,27 @@ button{
     color: beige;
     font-size: larger;
 }
+.INSTRUCTIONS{
+    border-radius: 10px;
+    border-style: solid;
+    border-color: rgb(129, 126, 122);
+    background-color: rgb(80, 77, 77);
+    color: rgb(252, 247, 247);
+    font-family:"Pixelify Sans", sans-serif ;
+    width: 300px;
+    height:400px;
+    position: absolute;
+    top: 16%;
+    right: 4%;
+}
+.head{
+    text-align: center;
+    font-weight: 900;
+    font-size: 40px;
+}
+.sub-head{
+    text-align: center;
+    font-weight: 700;
+    font-size: 20px;
+    padding-bottom: 15px;
+}

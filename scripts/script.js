@@ -11,7 +11,7 @@ offscreenCanvas.width = canvas.width;
 offscreenCanvas.height = canvas.height;
 import {Boundary} from "./map.js";
 import {Coin} from "./coins.js";
-
+var gameover=true;
 
  
 const map=[
@@ -119,7 +119,7 @@ healthupdate(p);
 
 
 function move(){
-    
+ if(!gameover){
  end(); 
  nextlev(); 
  
@@ -163,7 +163,7 @@ villains.forEach((vill)=>{
     
     
 
-
+ }
     requestAnimationFrame(move);
 }
 
@@ -267,7 +267,7 @@ bulletImage.src = "../images/bullet.png";
         let s=Math.ceil(Math.random*3);
         
         villains.forEach((vill)=>{
-            if (getDistance(vill, p) < 95 && !(behind(p,vill))) {
+            if (getDistance(vill, p) < 120 && !(behind(p,vill))) {
                 
                vill.startShooting(p);
                playgunAudio('../audio/shots.mp3');
@@ -424,7 +424,7 @@ function end(){
 
 export function reset(){
     
-        
+       gameover=false;
         p.position = { x: 200, y: 350 }; 
         p.velocity = { x: 0, y: 0 };     
         p.health = 3;                    
@@ -522,8 +522,9 @@ export function playgame(){
     d.innerHTML="";
     const l=document.querySelector(".canvas-box");
         l.style.filter="none";
-        cli++;
+        
         reset();
+        
 
 }
 function game_end(){
@@ -540,10 +541,11 @@ function game_end(){
     
     const l=document.querySelector(".canvas-box");
         l.style.filter="blur(100px)";
+        gameover=true;
 }
-var cli=0;
+
 function nextlev(){
-    if(villains.length==0 && cli!=0){
+    if(villains.length==0 ){gameover=true;
         const d=document.querySelector(".over");
     const p=document.createElement('div');
     p.className="title";
@@ -552,7 +554,7 @@ function nextlev(){
     const butt=document.createElement("button");
     butt.className="sub-title";
     
-    butt.textContent = "NEXT LEVEL";
+    butt.textContent = "PLAY AGAIN";
     // if (lev==10){butt.textContent = "START AGAIN";}
     butt.addEventListener("click", playgame);
     d.appendChild(butt);
