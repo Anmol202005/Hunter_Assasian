@@ -67,6 +67,7 @@ images.forEach(image => {
                             case '7':border[i][j]=new Boundary({position : {x:120+bsize*j,y:25+bsize*i},image:img});
                              border[i][j].draw(offscreenCtx);
                              border[i][j].blocked=true;
+                             
                              break;
                             case '1':border[i][j]=new Boundary({position : {x:120+bsize*j,y:25+bsize*i},image:bmg1});
                              border[i][j].draw(offscreenCtx);
