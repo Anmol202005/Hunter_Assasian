@@ -8,12 +8,13 @@ this.c=0;
 this.pangle=0;
 this.angle=0;
 this.off=0;
+this.health=3;
 
 }
 update(){
     this.position.x+=this.velocity.x;
     this.position.y+=this.velocity.y;
-    // this.angle=Math.atan2(this.velocity.y,this.velocity.x);
+    
 
 }
 build(){
@@ -30,5 +31,4 @@ build(){
 
 }}
 
-const canvas =document.querySelector(".map");
-const c=canvas.getContext("2d");
+

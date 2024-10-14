@@ -1,6 +1,7 @@
 body{
    
     margin: 0;
+    overflow:hidden ;
 }
 .map{
     margin:0;
@@ -9,4 +10,42 @@ body{
     background-image: url("../images/images.jpeg");
    background-repeat: repeat;
     
+}
+.heart{
+    height: 30px;
+    width: 60px;
+    
+}
+.canvas-box{
+    filter: blur(100px);
+}
+.title{
+    position:absolute;
+    top: 30%;
+   
+    font-size: 80px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family:"Pixelify Sans", sans-serif;
+}
+button{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "Pixelify Sans", sans-serif;
+    width:300px;
+    height: 40px;
+    font-size: 30px;
+    
+}
+.coins{
+    position: absolute;
+    top: 100px;
+    left: 81%;
+    font-family:"Pixelify Sans", sans-serif;
+    color: beige;
+    font-size: larger;
 }

@@ -10,37 +10,35 @@ const offscreenCtx = offscreenCanvas.getContext('2d');
 offscreenCanvas.width = canvas.width;
 offscreenCanvas.height = canvas.height;
 import {Boundary} from "./map.js";
-
+import {Coin} from "./coins.js";
 
 
  
 const map=[
-    [ '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '4', '4', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '4', '4', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '1', '1', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '1', '1', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '1', '1', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '1', '1', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '4', '4', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '4', '4', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '1', '1', '3', '3', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '1', '1', '3', '3', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '2', '2', '4', '4', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '2', '2', '4', '4', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '2', '2', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '2', '2', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7' ],
-    [ '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7' ],
+    
+    [  '7', '7',  '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7',  ],
+    [  '7', '7',  '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '4', '4', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '4', '4', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '3', '3', '1', '1', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '1', '1', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '3', '3', '1', '1', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '1', '1', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '3', '3', '3', '3', '3', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '1', '3', '3', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '2', '2', '4', '4', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7',  ],
+    [  '7', '7',  '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7',  ],
+    
 ]
 
 const border=[ [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [] ];
@@ -98,51 +96,56 @@ images.forEach(image => {
          });
         c.drawImage(offscreenCanvas, 0, 0);}}})
          function render() {
-            c.clearRect(0, 0, canvas.width, canvas.height); // Clear the main canvas
-            c.drawImage(offscreenCanvas, 0, 0); // Draw the offscreen canvas
+            c.clearRect(0, 0, canvas.width, canvas.height); 
+            c.drawImage(offscreenCanvas, 0, 0); 
           }
           
-          // Call the render function whenever needed to update the main canvas
+          
           render();
-         
+          var rst=false;      
 import {Player} from "./player.js";
 import{Bullet} from "./bullet.js"
 const char1=new Image;
 char1.src="../images/walk with knife.png";
 char1.frameIndex=1;
 var p;
-let path = [];
-var targetIndex = 0;
-let isMoving = false;
+var lev=1;
+var coincount=0;
+const coinarr=[];
 char1.onload=()=>{
-p= new Player({position:{x:300,y:350},velocity:{x:0,y:0},image:char1}) 
+p= new Player({position:{x:200,y:350},velocity:{x:0,y:0},image:char1}) 
 p.build();
+healthupdate(p);
 
 
 function move(){
     
+ end(); 
+ nextlev(); 
+ 
 c.clearRect(0,0,canvas.width,canvas.height);
 render();
 p.build();
 if(boundary_check(p)==false){
-    c.save();
-    c.translate(p.position.x+40/2,p.position.y+50/2);
-    c.rotate(p.angle);
-    c.clearRect(-25,-25,45,50);
-    c.restore();
+    
     
     p.update();
     p.build();
 }   
-
+coinarr.forEach((m)=>{m.build()});  
 villains.forEach((vill)=>{
     
     vill.bullets.forEach((bullet, index) => {
         if(boundary_check(bullet) || kill_check(p,bullet)){
             vill.bullets.splice(index, 1);
             if(kill_check(p,bullet)){
-                 p.position.x=-1000;
-                 p.position.y=-1000;
+                p.health--;
+                healthupdate(p);
+                if(p.health==0){
+                    p.position.x=-1000;
+                    p.position.y=-1000;
+                    game_end();
+                }
             }
             return;
         }
@@ -152,7 +155,10 @@ villains.forEach((vill)=>{
     vill.update();
     vill.build();
     })
-
+  coinarr.forEach((l,i)=>{if(kill_check(p,l)){coinarr.splice(i,1); coincount++;
+    const d=document.querySelector(".coins");
+    d.innerHTML=`Coins:${coincount}`;
+  }})
     
     
     
@@ -160,25 +166,26 @@ villains.forEach((vill)=>{
 
     requestAnimationFrame(move);
 }
+
 move();}
 
 
 addEventListener("keydown",(event)=>{
     
     if(event.key=="ArrowDown" || event.key=="s"){
-        p.velocity.y=2;
+        p.velocity.y=3;
         char1.frameIndex=6;
     }
     if(event.key=="ArrowUp" || event.key=="w"){
-        p.velocity.y=-2;
+        p.velocity.y=-3;
         char1.frameIndex=6;
     }
     if(event.key=="ArrowRight" || event.key=="d"){
-        p.velocity.x=2;
+        p.velocity.x=3;
         char1.frameIndex=6;
     }
     if(event.key=="ArrowLeft" || event.key=="a"){
-        p.velocity.x=-2;
+        p.velocity.x=-3;
         char1.frameIndex=6;
     }
     if(event.key==" "){
@@ -239,15 +246,17 @@ function boundary_check(p) {
   }
   import { Villain } from "./villain.js";
   const villainImage = new Image();
-villainImage.src = "../images/vill.png"; 
+  
+villainImage.src = "../images/newvill.png";
+villainImage.frameIndex=6; 
 
 let villains = [];
 
 
 villainImage.onload = () => {
-    villains.push(new Villain({ position: { x: 700, y: 200 }, velocity: { x: 1, y: 0 }, image: villainImage }));
-    villains.push(new Villain({ position: { x: 700, y: 500 }, velocity: { x: 1, y: 0 }, image: villainImage }));
-    villains.push(new Villain({ position: { x: 700, y: 300 }, velocity: { x: 1, y: 0 }, image: villainImage }));
+    villains.push(new Villain({ position: { x: 500, y: 150 }, velocity: { x: 1, y: 0 }, image: villainImage }));
+    villains.push(new Villain({ position: { x: 180, y: 120 }, velocity: { x: 1, y: 0 }, image: villainImage }));
+    villains.push(new Villain({ position: { x: 650, y: 300 }, velocity: { x: 1, y: 0 }, image: villainImage }));
     villains.forEach((vill)=>{ vill.build();})}
     let bullets = [];
 const bulletImage = new Image();
@@ -258,11 +267,16 @@ bulletImage.src = "../images/bullet.png";
         let s=Math.ceil(Math.random*3);
         
         villains.forEach((vill)=>{
-            if (getDistance(vill, p) < 95 && !(p.position.x < vill.position.x && p.velocity.x<vill.velocity.x) && !(p.position.x > vill.position.x && p.velocity.x> vill.velocity.x)&&!(p.position.y < vill.position.y && p.velocity.y< vill.velocity.y)&& !(p.position.y > vill.position.y&& p.velocity.y>vill.velocity.y)) {
+            if (getDistance(vill, p) < 95 && !(behind(p,vill))) {
                 
                vill.startShooting(p);
+               playgunAudio('../audio/shots.mp3');
             }
-            else{vill.stopShooting();}
+            else{vill.stopShooting();
+                
+                    
+                
+            }
             
             if(boundary_check(vill)){
                 if(arr[0]==1){
@@ -315,7 +329,9 @@ bulletImage.src = "../images/bullet.png";
                                 }
                       }
                     }
-                }}})
+                }
+            } vill.angle= Math.atan2(vill.velocity.y, vill.velocity.x);
+        })
             
             }
             function shuffleArray(array) {
@@ -366,4 +382,184 @@ bulletImage.src = "../images/bullet.png";
                 })
             }
             
-            
+            let audio;
+
+function playgunAudio(audioSrc) {
+    if (!audio) {
+        audio = new Audio(audioSrc);
+    }
+    audio.play();
+}
+
+function pausegunAudio() {
+    if (audio) {
+        audio.pause();
+    }
+}
+
+function stopgunAudio() {
+    if (audio && !audio.paused) {
+        audio.pause();
+        audio.currentTime = 0; 
+    }
+}
+function healthupdate(p) {
+    var d = document.querySelector(".health");
+    d.innerHTML = ""; 
+    
+    
+    for (let j = 1; j <= p.health; j++) {
+        var img = document.createElement("img");
+        img.src = "../images/hp.png"; 
+        img.className = "heart"; 
+        d.appendChild(img); 
+    }
+}
+function end(){
+    if (villains.length==0){
+        const d=document.querySelector(".canvas-box");
+        d.style.filter="blur(10)";
+    }
+}
+
+export function reset(){
+    
+        
+        p.position = { x: 200, y: 350 }; 
+        p.velocity = { x: 0, y: 0 };     
+        p.health = 3;                    
+        p.image = char1;                 
+        p.angle = 0;                     
+        healthupdate(p);                 
+    
+        
+        villains = [];
+        villains.push(new Villain({ position: { x: 500, y: 150 }, velocity: { x: 1, y: 0 }, image: villainImage }));
+        villains.push(new Villain({ position: { x: 180, y: 120 }, velocity: { x: 1, y: 0 }, image: villainImage }));
+        villains.push(new Villain({ position: { x: 650, y: 300 }, velocity: { x: 1, y: 0 }, image: villainImage }));
+    
+        
+        villains.forEach(vill => {
+            vill.bullets = []; 
+        });
+    
+        const canvas = document.querySelector("canvas");
+        const c = canvas.getContext("2d");
+
+        c.clearRect(0, 0, canvas.width, canvas.height);
+        coincount=0;
+        const d=document.querySelector(".coins");
+        d.innerHTML=`Coins:${coincount}`;
+        coinarr.length=0;
+     const coinPositions = RandomCoinPositions(ZeroPositions(map),10);
+
+    coinPositions.forEach((pos) => {
+        coinarr.push( new Coin({position:pos, image:coinImage}));
+         
+    });
+    }
+    
+    
+    function behind(player, villain) {
+        
+        const playerMovingLeft = player.velocity.x <= 0;
+        const playerMovingRight = player.velocity.x >= 0;
+        const playerMovingUp = player.velocity.y <= 0;
+        const playerMovingDown = player.velocity.y >= 0;
+    
+        const villainMovingLeft = villain.velocity.x < 0;
+        const villainMovingRight = villain.velocity.x > 0;
+        const villainMovingUp = villain.velocity.y < 0;
+        const villainMovingDown = villain.velocity.y > 0;
+    
+        const b =
+            (player.position.x < villain.position.x && playerMovingRight && villainMovingRight) ||
+            (player.position.x > villain.position.x && playerMovingLeft && villainMovingLeft) ||
+            (player.position.y < villain.position.y && playerMovingDown && villainMovingDown) ||
+            (player.position.y > villain.position.y && playerMovingUp && villainMovingUp);
+    
+        return b; 
+    }
+    const coinImage = new Image();
+coinImage.src = '../images/coin.png'; 
+coinImage.onload = () => {
+    
+    const coinPositions = RandomCoinPositions(ZeroPositions(map),10);
+
+    coinPositions.forEach((pos) => {
+        coinarr.push( new Coin({position:pos, image:coinImage}));
+         
+    });
+};
+
+
+    
+function ZeroPositions(map) {
+    const zeroarr = [];
+    map.forEach((row, rowIndex) => {
+        row.forEach((cell, colIndex) => {
+            if (cell ==='0') {
+                zeroarr.push({ x: colIndex*25+120 , y: rowIndex*25+25 });
+            }
+        });
+    });
+    return zeroarr;
+}
+
+function RandomCoinPositions(zeroPositions, totalCoins) {
+    
+    totalCoins = Math.min(totalCoins, zeroPositions.length);
+
+    
+    const shuffledPositions = zeroPositions.sort(() => Math.random() - 0.5);
+    
+    
+    return shuffledPositions.slice(0, totalCoins);
+}
+export function playgame(){
+        
+    const d=document.querySelector(".over")
+    d.innerHTML="";
+    const l=document.querySelector(".canvas-box");
+        l.style.filter="none";
+        cli++;
+        reset();
+
+}
+function game_end(){
+    const d=document.querySelector(".over");
+    const p=document.createElement('div');
+    p.className="title";
+    p.innerHTML="YOU LOST"
+    d.appendChild(p);
+    const butt=document.createElement("button");
+    butt.className="sub-title";
+    butt.textContent = "START AGAIN";
+    butt.addEventListener("click", playgame);
+    d.appendChild(butt);
+    
+    const l=document.querySelector(".canvas-box");
+        l.style.filter="blur(100px)";
+}
+var cli=0;
+function nextlev(){
+    if(villains.length==0 && cli!=0){
+        const d=document.querySelector(".over");
+    const p=document.createElement('div');
+    p.className="title";
+    p.innerHTML="YOU WON"
+    d.appendChild(p);
+    const butt=document.createElement("button");
+    butt.className="sub-title";
+    
+    butt.textContent = "NEXT LEVEL";
+    // if (lev==10){butt.textContent = "START AGAIN";}
+    butt.addEventListener("click", playgame);
+    d.appendChild(butt);
+    
+    const l=document.querySelector(".canvas-box");
+        l.style.filter="blur(100px)";
+
+    }
+    lev++;
+}

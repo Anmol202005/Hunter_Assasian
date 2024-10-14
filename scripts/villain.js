@@ -7,18 +7,21 @@ export class Villain {
         this.velocity = velocity;
         this.image = image;
 
-        this.width = 619;
-        this.height = 403;
+        this.width = 50;
+        this.height = 50;
         this.shootInterval = null;
         this.bullets = [];
-        this.speed = 4;
+        this.speed = 6;
+        this.angle=0;
+        this.f=0;
+        this.c=0;
     }
 
     update() {
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
 
-        // Update each bullet's position
+        
         this.bullets.forEach((bullet, index) => {
             bullet.update();
 
@@ -34,12 +37,14 @@ export class Villain {
     }
 
     build() {
-        const canvas = document.querySelector(".map");
-        const c = canvas.getContext("2d");
+        const canvas =document.querySelector(".map");
+        const c=canvas.getContext("2d");
+        c.save();
+        c.translate(this.position.x+50/2,this.position.y+50/2);
+        c.rotate(this.angle);
         
-        // Draw the villain
-        c.drawImage(this.image, 0, 0, this.width, this.height, this.position.x, this.position.y, 40, 50);
-
+        c.drawImage(this.image,0+45*((this.f)%this.image.frameIndex),0,40,60,-20,-25,40,50);
+        c.restore();
         // Draw each bullet
         this.bullets.forEach(bullet => {
             bullet.draw(c);
@@ -52,7 +57,7 @@ export class Villain {
         const angle = Math.atan2(dy, dx);
     
         this.bullets.push(new Bullet({
-            position: { x: this.position.x, y: this.position.y + 20 },
+            position: { x: this.position.x+40, y: this.position.y + 20 },
             velocity: { x: Math.cos(angle) * this.speed, y: Math.sin(angle) * this.speed },
             image: villbull
         }));
@@ -62,7 +67,7 @@ export class Villain {
         if (this.shootInterval === null) {
             this.shootInterval = setInterval(() => {
                 this.shootAtHero(hero);
-            }, 500);
+            }, 100);
         }
     }
 
