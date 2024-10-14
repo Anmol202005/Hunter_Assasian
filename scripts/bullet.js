@@ -8,7 +8,7 @@ export class Bullet {
     draw() {
         const canvas = document.querySelector(".map");
         const c = canvas.getContext("2d");
-        c.drawImage(this.image, this.position.x, this.position.y, 10, 10); 
+        c.drawImage(this.image, this.position.x, this.position.y, 20, 20); 
     }
 
     update() {

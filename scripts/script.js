@@ -116,7 +116,9 @@ char1.onload=()=>{
 p= new Player({position:{x:200,y:350},velocity:{x:0,y:0},image:char1}) 
 p.build();
 healthupdate(p);
-
+const blast = new Image();
+  
+blast.src = "../images/blast.png";
 
 function move(){
     
@@ -160,7 +162,31 @@ villains.forEach((vill)=>{
     d.innerHTML=`Coins:${coincount}`;
   }})
     
-    
+  dragon.forEach((drag) => {
+    drag.update();
+    drag.build();
+
+    if (drag.position.y > 10 && drag.position.y < window.innerHeight) {
+        villains.forEach((vill)=>drag.startShooting(vill));  
+         playgunAudio('../audio/dragon.mp3');
+    } else {
+        drag.stopShooting();
+    }
+
+    drag.bullets = drag.bullets.filter((bull, i) => {
+        let hit = false;
+        villains.forEach((vill,j) => {
+            if (kill_check(vill, bull)) {
+                drag.bullets.splice(i, 1); 
+                villains.splice(j,1); 
+                vill.image = blast;  
+                hit = true;
+            }
+        });
+        return !hit;  
+    });
+});
+
     
 
 
@@ -562,4 +588,15 @@ function nextlev(){
 
     }
     lev++;
+}
+import {Dragon} from "../scripts/dragon.js";
+var dragon=[];
+export function callhelp(){
+
+
+var drimg=new Image();
+drimg.src="../images/dragon.png";if(coincount==10){
+dragon.push(new Dragon({position:{x:500,y:25},velocity:{x:0,y:3},image:drimg}));
+coincount-=10;}
+else{alert("insufficient coins");}
 }

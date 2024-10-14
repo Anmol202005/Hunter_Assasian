@@ -49,3 +49,6 @@ button{
     color: beige;
     font-size: larger;
 }
+#help{position: absolute;
+ top:200px;
+left: 85%;}
