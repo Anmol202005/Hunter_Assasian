@@ -11,7 +11,15 @@ offscreenCanvas.width = canvas.width;
 offscreenCanvas.height = canvas.height;
 import {Boundary} from "./map.js";
 import {Coin} from "./coins.js";
+import { Villain } from "./villain.js";
+var gameover=true;
 
+  const villainImage = new Image();
+  
+villainImage.src = "../images/newvill.png";
+villainImage.frameIndex=6; 
+
+let villains = [];
 
  
 const map=[
@@ -117,11 +125,12 @@ p= new Player({position:{x:200,y:350},velocity:{x:0,y:0},image:char1})
 p.build();
 healthupdate(p);
 const blast = new Image();
+
   
 blast.src = "../images/blast.png";
 
 function move(){
-    
+    if(!gameover){  
  end(); 
  nextlev(); 
  
@@ -172,7 +181,9 @@ villains.forEach((vill)=>{
     } else {
         drag.stopShooting();
     }
-
+     drag.bullets.forEach((bull)=>{bull.update();
+        bull.draw();
+     })
     drag.bullets = drag.bullets.filter((bull, i) => {
         let hit = false;
         villains.forEach((vill,j) => {
@@ -187,7 +198,7 @@ villains.forEach((vill)=>{
     });
 });
 
-    
+}
 
 
     requestAnimationFrame(move);
@@ -270,14 +281,7 @@ function boundary_check(p) {
     }
     return false;
   }
-  import { Villain } from "./villain.js";
-  const villainImage = new Image();
   
-villainImage.src = "../images/newvill.png";
-villainImage.frameIndex=6; 
-
-let villains = [];
-
 
 villainImage.onload = () => {
     villains.push(new Villain({ position: { x: 500, y: 150 }, velocity: { x: 1, y: 0 }, image: villainImage }));
@@ -293,10 +297,10 @@ bulletImage.src = "../images/bullet.png";
         let s=Math.ceil(Math.random*3);
         
         villains.forEach((vill)=>{
-            if (getDistance(vill, p) < 95 && !(behind(p,vill))) {
+            if (getDistance(vill, p) < 200) {
                 
                vill.startShooting(p);
-               playgunAudio('../audio/shots.mp3');
+            //    playgunAudio('../audio/shots.mp3');
             }
             else{vill.stopShooting();
                 
@@ -449,7 +453,7 @@ function end(){
 }
 
 export function reset(){
-    
+        gameover=false;
         
         p.position = { x: 200, y: 350 }; 
         p.velocity = { x: 0, y: 0 };     
@@ -549,6 +553,7 @@ export function playgame(){
     const l=document.querySelector(".canvas-box");
         l.style.filter="none";
         cli++;
+        
         reset();
 
 }
@@ -566,10 +571,11 @@ function game_end(){
     
     const l=document.querySelector(".canvas-box");
         l.style.filter="blur(100px)";
+        gameover=true;
 }
 var cli=0;
 function nextlev(){
-    if(villains.length==0 && cli!=0){
+    if(villains.length==0 ){gameover=true;
         const d=document.querySelector(".over");
     const p=document.createElement('div');
     p.className="title";
@@ -578,7 +584,7 @@ function nextlev(){
     const butt=document.createElement("button");
     butt.className="sub-title";
     
-    butt.textContent = "NEXT LEVEL";
+    butt.textContent = "PLAY AGAIN";
     // if (lev==10){butt.textContent = "START AGAIN";}
     butt.addEventListener("click", playgame);
     d.appendChild(butt);
@@ -595,8 +601,10 @@ export function callhelp(){
 
 
 var drimg=new Image();
-drimg.src="../images/dragon.png";if(coincount==10){
+drimg.src="../images/dragon.png";if(coincount>=10){
 dragon.push(new Dragon({position:{x:500,y:25},velocity:{x:0,y:3},image:drimg}));
-coincount-=10;}
+coincount-=10;
+const d=document.querySelector(".coins");
+    d.innerHTML=`Coins:${coincount}`;}
 else{alert("insufficient coins");}
 }

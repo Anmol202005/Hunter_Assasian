@@ -1,6 +1,6 @@
 import { Bullet } from "./bullet.js";
 let villbull = new Image();
-villbull.src = "../images/bullet.png";
+villbull.src = "../images/bull.png";
 
 export class Dragon {
     constructor({ position, velocity, image }) {
@@ -10,8 +10,8 @@ export class Dragon {
         this.f = 0;
         this.c = 0;
         this.bullets = [];
-        this.shootInterval = null;  // Ensure consistent naming
-        this.speed = 5;  // Set a default bullet speed
+        this.shootInterval = null;  
+        this.speed = 10;  
     }
 
     update() {
@@ -67,7 +67,7 @@ export class Dragon {
         
         this.bullets.forEach((bullet) => {
             bullet.update(); 
-            bullet.draw(c);  
+            bullet.draw();  
         });
     }
 }
