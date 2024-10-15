@@ -1,5 +1,3 @@
-
-
 const canvas=document.querySelector('.map');
 const c=canvas.getContext('2d');
 
@@ -11,7 +9,15 @@ offscreenCanvas.width = canvas.width;
 offscreenCanvas.height = canvas.height;
 import {Boundary} from "./map.js";
 import {Coin} from "./coins.js";
+import { Villain } from "./villain.js";
 var gameover=true;
+
+  const villainImage = new Image();
+  
+villainImage.src = "../images/newvill.png";
+villainImage.frameIndex=6; 
+
+let villains = [];
 
  
 const map=[
@@ -20,20 +26,20 @@ const map=[
     [  '7', '7',  '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7',  ],
     [  '7', '7',  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '7', '7',  ],
     [  '7', '7',  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '7', '7',  ],
-    [  '7', '7',  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '4', '4', '7', '7',  ],
-    [  '7', '7',  '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '4', '4', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '4', '7', '7',  ],
     [  '7', '7',  '0', '0', '0', '0', '3', '3', '1', '1', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '1', '1', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
     [  '7', '7',  '0', '0', '0', '0', '3', '3', '1', '1', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '1', '1', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
     [  '7', '7',  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
     [  '7', '7',  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
     [  '7', '7',  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '7', '7',  ],
     [  '7', '7',  '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '3', '3', '3', '3', '3', '0', '0', '0', '7', '7',  ],
-    [  '7', '7',  '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '7', '7',  ],
-    [  '7', '7',  '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '7', '7',  ],
-    [  '7', '7',  '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '7', '7',  ],
-    [  '7', '7',  '0', '0', '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '1', '3', '3', '7', '7',  ],
-    [  '7', '7',  '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '2', '2', '4', '4', '0', '0', '0', '0', '0', '0', '7', '7',  ],
-    [  '7', '7',  '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '1', '3', '3', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '2', '2', '4', '4', '0', '0', '0', '0', '0', '0', '7', '7',  ],
+    [  '7', '7',  '0', '0', '0', '0', '0.', '1', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
     [  '7', '7',  '0', '0', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
     [  '7', '7',  '0', '0', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '7', '7',  ],
     [  '7', '7',  '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7',  ],
@@ -117,10 +123,13 @@ char1.onload=()=>{
 p= new Player({position:{x:200,y:350},velocity:{x:0,y:0},image:char1}) 
 p.build();
 healthupdate(p);
+const blast = new Image();
 
+  
+blast.src = "../images/blast.png";
 
 function move(){
- if(!gameover){
+    if(!gameover){  
  end(); 
  nextlev(); 
  
@@ -161,10 +170,36 @@ villains.forEach((vill)=>{
     d.innerHTML=`Coins:${coincount}`;
   }})
     
-    
-    
+  dragon.forEach((drag) => {
+    drag.update();
+    drag.build();
 
- }
+    if (drag.position.y > 10 && drag.position.y < window.innerHeight) {
+        villains.forEach((vill)=>drag.startShooting(vill));  
+         playgunAudio('../audio/dragon.mp3');
+    } else {
+        drag.stopShooting();
+    }
+     drag.bullets.forEach((bull)=>{bull.update();
+        bull.draw();
+     })
+    drag.bullets = drag.bullets.filter((bull, i) => {
+        let hit = false;
+        villains.forEach((vill,j) => {
+            if (kill_check(vill, bull)) {
+                drag.bullets.splice(i, 1); 
+                villains.splice(j,1); 
+                vill.image = blast;  
+                hit = true;
+            }
+        });
+        return !hit;  
+    });
+});
+
+}
+
+
     requestAnimationFrame(move);
 }
 
@@ -245,19 +280,10 @@ function boundary_check(p) {
     }
     return false;
   }
-  import { Villain } from "./villain.js";
-  const villainImage = new Image();
   
-villainImage.src = "../images/newvill.png";
-villainImage.frameIndex=6; 
-
-let villains = [];
-
 
 villainImage.onload = () => {
-    villains.push(new Villain({ position: { x: 500, y: 150 }, velocity: { x: 1, y: 0 }, image: villainImage }));
-    villains.push(new Villain({ position: { x: 180, y: 120 }, velocity: { x: 1, y: 0 }, image: villainImage }));
-    villains.push(new Villain({ position: { x: 650, y: 300 }, velocity: { x: 1, y: 0 }, image: villainImage }));
+    villains = generateVillains(lev, map,villainImage);
     villains.forEach((vill)=>{ vill.build();})}
     let bullets = [];
 const bulletImage = new Image();
@@ -268,10 +294,10 @@ bulletImage.src = "../images/bullet.png";
         let s=Math.ceil(Math.random*3);
         
         villains.forEach((vill)=>{
-            if (getDistance(vill, p) < 120 && !(behind(p,vill))) {
+            if (getDistance(vill, p) < 200) {
                 
                vill.startShooting(p);
-               playgunAudio('../audio/shots.mp3');
+            //    playgunAudio('../audio/shots.mp3');
             }
             else{vill.stopShooting();
                 
@@ -424,8 +450,8 @@ function end(){
 }
 
 export function reset(){
-    
-       gameover=false;
+        gameover=false;
+        
         p.position = { x: 200, y: 350 }; 
         p.velocity = { x: 0, y: 0 };     
         p.health = 3;                    
@@ -433,11 +459,9 @@ export function reset(){
         p.angle = 0;                     
         healthupdate(p);                 
     
-        
+        dragon=[];
         villains = [];
-        villains.push(new Villain({ position: { x: 500, y: 150 }, velocity: { x: 1, y: 0 }, image: villainImage }));
-        villains.push(new Villain({ position: { x: 180, y: 120 }, velocity: { x: 1, y: 0 }, image: villainImage }));
-        villains.push(new Villain({ position: { x: 650, y: 300 }, velocity: { x: 1, y: 0 }, image: villainImage }));
+        villains = generateVillains(lev, map,villainImage);
     
         
         villains.forEach(vill => {
@@ -452,7 +476,7 @@ export function reset(){
         const d=document.querySelector(".coins");
         d.innerHTML=`Coins:${coincount}`;
         coinarr.length=0;
-     const coinPositions = RandomCoinPositions(ZeroPositions(map),10);
+     const coinPositions = RandomCoinPositions(ZeroPositions(map),20);
 
     coinPositions.forEach((pos) => {
         coinarr.push( new Coin({position:pos, image:coinImage}));
@@ -485,7 +509,7 @@ export function reset(){
 coinImage.src = '../images/coin.png'; 
 coinImage.onload = () => {
     
-    const coinPositions = RandomCoinPositions(ZeroPositions(map),10);
+    const coinPositions = RandomCoinPositions(ZeroPositions(map),20);
 
     coinPositions.forEach((pos) => {
         coinarr.push( new Coin({position:pos, image:coinImage}));
@@ -523,9 +547,9 @@ export function playgame(){
     d.innerHTML="";
     const l=document.querySelector(".canvas-box");
         l.style.filter="none";
+        cli++;
         
         reset();
-        
 
 }
 function game_end(){
@@ -544,7 +568,7 @@ function game_end(){
         l.style.filter="blur(100px)";
         gameover=true;
 }
-
+var cli=0;
 function nextlev(){
     if(villains.length==0 ){gameover=true;
         const d=document.querySelector(".over");
@@ -555,14 +579,67 @@ function nextlev(){
     const butt=document.createElement("button");
     butt.className="sub-title";
     
-    butt.textContent = "PLAY AGAIN";
+    butt.textContent = "NEXT LEVEL";
     // if (lev==10){butt.textContent = "START AGAIN";}
     butt.addEventListener("click", playgame);
     d.appendChild(butt);
     
     const l=document.querySelector(".canvas-box");
         l.style.filter="blur(100px)";
-
+        lev++;
+        const k=document.querySelector(".level");
+        k.innerHTML=`Level:${lev}`;
     }
-    lev++;
+    
+}
+import {Dragon} from "../scripts/dragon.js";
+var dragon=[];
+export function callhelp(){
+
+
+var drimg=new Image();
+drimg.src="../images/dragon.png";if(coincount>=10){
+dragon.push(new Dragon({position:{x:500,y:25},velocity:{x:0,y:3},image:drimg}));
+coincount-=10;
+const d=document.querySelector(".coins");
+    d.innerHTML=`Coins:${coincount}`;}
+else{alert("insufficient coins");}
+}
+
+
+
+
+
+
+function generateVillains(lev, map, villainImage) {
+    const villains = [];
+    const totalVillains = lev + 2;
+    
+    
+    const zeroPositions = ZeroPositions(map);
+    
+    
+    const randomPositions = RandomCoinPositions(zeroPositions, totalVillains);
+    
+    
+    randomPositions.forEach(pos => {
+        let villain = new Villain({
+            position: { x: pos.x, y: pos.y },
+            velocity: { x: 1, y: 0 },
+            image: villainImage
+        });
+        
+        
+        while (boundary_check(villain, map)) {
+            
+            const newPos = RandomCoinPositions(zeroPositions, 1)[0];
+            villain.position.x = newPos.x;
+            villain.position.y = newPos.y;
+        }
+        
+        
+        villains.push(villain);
+    });
+
+    return villains;
 }

@@ -8,12 +8,12 @@ export class Bullet {
     draw() {
         const canvas = document.querySelector(".map");
         const c = canvas.getContext("2d");
-        c.drawImage(this.image, this.position.x, this.position.y, 10, 10); 
+        c.drawImage(this.image, this.position.x, this.position.y); 
     }
 
     update() {
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
-        this.draw();
+        
     }
 }

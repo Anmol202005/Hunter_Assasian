@@ -1,6 +1,6 @@
 import {Bullet} from "./bullet.js"
 let villbull=new Image();
-villbull.src="../images/bullet.png";
+villbull.src="../images/bull.png";
 export class Villain {
     constructor({ position, velocity, image }) {
         this.position = position;
@@ -11,7 +11,7 @@ export class Villain {
         this.height = 50;
         this.shootInterval = null;
         this.bullets = [];
-        this.speed = 6;
+        this.speed = 3;
         this.angle=0;
         this.f=0;
         this.c=0;
@@ -47,7 +47,7 @@ export class Villain {
         c.restore();
         // Draw each bullet
         this.bullets.forEach(bullet => {
-            bullet.draw(c);
+            bullet.draw();
         });
     }
 
@@ -67,7 +67,7 @@ export class Villain {
         if (this.shootInterval === null) {
             this.shootInterval = setInterval(() => {
                 this.shootAtHero(hero);
-            }, 100);
+            }, 500);
         }
     }
 

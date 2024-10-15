@@ -1,7 +1,7 @@
 body{
    
     margin: 0;
-    overflow:hidden ;
+    overflow:hidden;
 }
 .map{
     margin:0;
@@ -17,12 +17,12 @@ body{
     
 }
 .canvas-box{
-    filter: blur(100px);
+    filter: blur(5px);
 }
 .title{
     position:absolute;
     top: 30%;
-   
+    color:rgb(120, 197, 125);
     font-size: 80px;
     width: 100%;
     display: flex;
@@ -49,6 +49,7 @@ button{
     color: beige;
     font-size: larger;
 }
+
 .INSTRUCTIONS{
     border-radius: 10px;
     border-style: solid;
@@ -71,5 +72,17 @@ button{
     text-align: center;
     font-weight: 700;
     font-size: 20px;
-    padding-bottom: 15px;
+    padding-bottom: 15px;}
+
+#help{position: absolute;
+ top:400px;
+left: 85%;}
+.level{
+    position: absolute;
+    top: 150px;
+    left: 81%;
+    font-family:"Pixelify Sans", sans-serif;
+    color: beige;
+    font-size: larger;
+
 }
